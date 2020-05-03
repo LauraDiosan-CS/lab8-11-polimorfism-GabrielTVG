@@ -142,11 +142,28 @@
     <ClInclude Include="Mancare.h" />
     <ClInclude Include="Repository.h" />
     <ClInclude Include="RepositoryFile.h" />
+    <ClInclude Include="RepositoryFileCSV.h" />
+    <ClInclude Include="RepositoryFileCustom.h" />
+    <ClInclude Include="Service.h" />
+    <ClInclude Include="Test.h" />
+    <ClInclude Include="UI.h" />
+    <ClInclude Include="Utils.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="App.cpp" />
     <ClCompile Include="Comanda.cpp" />
     <ClCompile Include="Mancare.cpp" />
-    <ClCompile Include="RepositoryFile.cpp" />
+    <ClCompile Include="Service.cpp" />
+    <ClCompile Include="Shopping.cpp" />
+    <ClCompile Include="Test.cpp" />
+    <ClCompile Include="UI.cpp" />
+    <ClCompile Include="Utils.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Comenzi.csv" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Comenzi.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

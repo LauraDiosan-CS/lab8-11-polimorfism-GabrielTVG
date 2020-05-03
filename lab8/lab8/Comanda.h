@@ -1,28 +1,31 @@
 #pragma once
-#pragma once
 #include <iostream>
 #include <string>
+#include <vector>
+#include <sstream>
+#include "Utils.h"
 using namespace std;
 class Comanda {
 protected:
-	char* nume;
-	char* adresa;
-	char* lista;
+	string nume;
+	string adresa;
+	string lista;
 	int pret;
 public:
 	Comanda();
-	Comanda(const char*, char*, char*, int);
+	Comanda(const string, string, string, int);
+	Comanda(string, char);
 	Comanda(const Comanda&);
 	~Comanda();
-	char* getName();
-	void setName(char*);
-	char* getAdresa();
-	void setAdresa(char*);
-	char* getLista();
-	void setLista(char*);
+	string getName();
+	void setName(string);
+	string getAdresa();
+	void setAdresa(string);
+	string getLista();
+	void setLista(string);
 	int getPret();
 	void setPret(int);
 	Comanda& operator=(const Comanda&);
 	bool operator==(const Comanda&);
-
+	virtual string toStringDelimiter(char) = 0;
 };
