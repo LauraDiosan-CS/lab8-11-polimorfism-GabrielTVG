@@ -5,14 +5,14 @@ class UI
 {
 private:
 	Service ser;
-	int login();
-	void adaugareMancare();
-	void adaugareShopping();
-	void afisareComenzi();
-	void cautareDupaNume();
 public:
-	UI();
-	UI(Service&);
+	UI(Service& serv) :ser(serv) { ser = serv; };
 	void showMenu();
+	int login();
+	void adaugareComanda();
+	void afisareComenzi();
+	void stergereComanda();
+	void updateComanda();
+	void cautareDupaNume();
 	~UI();
 };

@@ -5,20 +5,22 @@
 #include <fstream>
 #include "Utils.h"
 using namespace std;
+
 template <class T>
 class Repository {
 protected: 
 	map<int, T>elem;
 	int contor;
 public:
-	Repository();
-	Repository(const Repository&);
-	void addElem(T& );
-	int findElem(T& );
-	void delElem(int);
-	void updateElem(int,T&);
+	Repository<T>();
+	//Repository(const Repository&);
+	virtual void addElem(T);
+	int findElem(T);
+	virtual void delElem(int);
+	virtual void updateElem(T,T);
 	int dim();
 	map<int,T> getAll();
+	virtual T getItemFromPos(int);
 	~Repository();
 };
 
@@ -27,52 +29,58 @@ template <class T> inline Repository<T>::Repository()
 	this->contor = 0;
 }
 
-template <class T> inline Repository<T>::Repository(const Repository& r)
-{
-	this->elem = r.elem;
-	this->contor = r.contor;
-}
-
-template <class T> inline void Repository<T>::addElem(T& a)
-{
-	this->elem.insert(pair<int, T>(this->contor++, a));
-}
-
-//template <class T> inline int Repository<T>::findElem(T& a)
+//template <class T> inline Repository<T>::Repository(const Repository& r)
 //{
-//	map<int, T>::iterator it = elem.begin();
-//	while (it != elem.end()) {
-//		if (it->second == a)
-//			return it->first;
-//		else
-//			it++;
-//	}
-//	return -1;
+//	this->elem = r.elem;
+//	this->contor = r.contor;
 //}
 
-template <class T> inline void Repository<T>::delElem(int nr)
+template <class T> void Repository<T>::addElem(T obj)
+{
+	this->elem.insert(pair<int, T>(this->contor++, obj));
+}
+
+template <class T> int Repository<T>::findElem(T a)
+{
+	for (auto itr = elem.begin(); itr != elem.end(); itr++)
+		if (elem.find(itr->first)->second == a)
+			return itr->first;
+	return -1;
+}
+
+template <class T> void Repository<T>::delElem(int nr)
 {
 	elem.erase(nr);
 }
 
-//template <class T> inline void Repository<T>::updateElem(int pozitie,T& noua)
-//{
-//	map<int, T>::iterator itf = elem.find(pozitie);
-//	if (itf != elem.end())
-//		this->elem[pozitie] = noua;
-//}
+template <class T> void Repository<T>::updateElem(T vechi,T noua)
+{
+	for(auto itr=elem.begin();itr!=elem.end();itr++)
+		if (elem.find(itr->first)->second == vechi)
+		{
+			elem[itr->first] = noua;
+			break;
+		}
+}
 
-template <class T> inline int Repository<T>::dim()
+template <class T> int Repository<T>::dim()
 {
 	return this->contor;
 }
 
-template <class T> inline map<int, T>Repository<T>::getAll()
+template <class T> map<int, T>Repository<T>::getAll()
 {
-	return this->elem;
+	return elem;
 }
 
-template <class T> inline Repository<T>::~Repository()
+template <class T> T Repository<T>::getItemFromPos(int poz)
+{
+	for (auto itr = elem.begin(); itr != elem.end(); itr++)
+		if (itr->first == poz)
+			return itr->second;
+	return T();
+}
+template <class T> Repository<T>::~Repository()
 {
 	elem.clear();
 	contor = 0;

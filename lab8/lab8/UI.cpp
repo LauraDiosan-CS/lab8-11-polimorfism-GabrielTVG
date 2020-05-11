@@ -1,14 +1,5 @@
 #include "UI.h"
 
-UI::UI()
-{
-
-}
-
-UI::UI(Service& serv)
-{
-	ser = serv;
-}
 
 UI::~UI()
 {
@@ -28,80 +19,158 @@ int UI::login()
 	return ok;
 }
 
-void UI::adaugareMancare()
-{
-	string nume, adresa, lista;
-	int pret, ok = 1;
-	cout << "Nume client: " << endl;
-	cin >> nume;
-	cout << "Adresa livrare: " << endl;
-	cin >> adresa;
-	cout << "Lista preparate" << endl;
-	cin >> lista;
-	cout << "Pret total: " << endl;
-	cin >> pret;
-	Mancare m(nume, adresa, lista, pret);
-	ser.addMancare(m);
-}
-
-void UI::adaugareShopping()
+void UI::adaugareComanda()
 {
 	string nume, adresa, lista, magazin;
-	int pret, ok = 1;
-	cout << "Nume client: " << endl;
-	cin >> nume;
-	cout << "Adresa livrare: " << endl;
-	cin >> adresa;
-	cout << "Lista preparate" << endl;
-	cin >> lista;
-	cout << "Pret total: " << endl;
-	cin >> pret;
-	cout << "Nume magazin: " << endl;
-	cin >> magazin;
-	Shopping s(nume, adresa, lista, pret, magazin);
-	ser.addShopping(s);
+	int pret, optiune;
+	cout <<endl<<"Mancare(1) sau Shopping(2)? : " << endl;
+	cin >> optiune;
+	if (optiune == 1)
+	{
+		try {
+			cout << "Nume client:\n";
+			cin.ignore();
+			getline(cin, nume);
+			cout << "Adresa livrare: " << endl;
+			//cin.ignore();
+			getline(cin, adresa);
+			cout << "Lista preparate" << endl;
+			//cin.ignore();
+			getline(cin, lista);
+			cout << "Pret total: " << endl;
+			cin >> pret;
+			Mancare com(nume, adresa, lista, pret);
+			Comanda* comanda = new Mancare(com);
+			ser.addComanda(comanda);
+			cout << "Mancare adaugata!" << endl;
+
+		}
+		catch (ComandaExceptie err)
+		{
+			for (unsigned i = 0; i < err.getErrors().size(); i++)
+				cout << err.getErrors()[i] << endl;
+		}
+	}
+	if (optiune == 2)
+	{
+		try {
+			cout << "Nume client:\n";
+			cin.ignore();
+			getline(cin, nume);
+			cout << "Adresa livrare: " << endl;
+			//cin.ignore();
+			getline(cin, adresa);
+			cout << "Lista cumparaturi: " << endl;
+			//cin.ignore();
+			getline(cin, lista);
+			cout << "Pret total: " << endl;
+			cin >> pret;
+			cout << "Nume magazin: " << endl;
+			cin.ignore();
+			getline(cin, magazin);
+			Shopping s(nume, adresa, lista, pret, magazin);
+			Comanda* comanda = new Shopping(s);
+			ser.addComanda(comanda);
+			cout << "Shopping adaugat!" << endl;
+		}
+		catch (ComandaExceptie err)
+		{
+			for (unsigned i = 0; i < err.getErrors().size(); i++)
+				cout << err.getErrors()[i] << endl;
+		}
+	}
+
 }
+
 
 void UI::afisareComenzi()
 {
-	map<int, Mancare> manc = ser.getAllMancare();
-	map<int, Shopping> shop = ser.getAllShopping();
-	map<int, Mancare>::iterator itr1 = manc.begin();
-	map<int, Shopping>::iterator itr2 = shop.begin();
-	cout << "Comenzi mancare:" << endl;
-	while (itr1 != manc.end())
-	{
-		cout << "Cheia: " << itr1->first << ' ' << itr1->second;
-		itr1++;
-	}
-	cout << "Comenzi shopping:" << endl;
-	while (itr2 != shop.end())
-	{
-		cout << "Cheia: " << itr2->first << ' ' << itr2->second;
-		itr2++;
-	}
+	map<int, Comanda*> t = ser.getAll();
+	for (auto itr = t.begin(); itr != t.end(); itr++)
+		cout << "Cheia: " << itr->first << ' ' << itr->second->toString() << endl;
 }
 
+void UI::stergereComanda()
+{
+	int poz;
+	cout << "Cheia in mapa la comanda care vrem sa o stergem: " << endl;
+	cin >> poz;
+	ser.delComanda(poz);
+}
+
+void UI::updateComanda()
+{
+	string numeNou,adresaNoua,listaNoua,magazinNou;
+	int pretNou, optiune,poz;
+	cout << "Ce comanda este cea care o actualizam? (1 Mancare, 2 Shopping): " << endl;
+	cin >> optiune;
+	if (optiune == 1)
+	{
+		try {
+			cout << "Pozitie in mapa: " << endl;
+			cin >> poz;
+			cout << "Nume client nou: " << endl;
+			cin.ignore();
+			getline(cin, numeNou);
+			cout << "Adresa livrare noua: " << endl;
+			getline(cin, adresaNoua);
+			cout << "Lista preparate noua: " << endl;
+			getline(cin, listaNoua);
+			cout << "Pret total nou: " << endl;
+			cin >> pretNou;
+			Comanda* comanda = ser.getItemFromPos(poz);
+			Mancare com2(numeNou, adresaNoua, listaNoua, pretNou);
+			Comanda* comanda2 = new Mancare(com2);
+			ser.updateComanda(comanda, comanda2);
+		}
+		catch (ComandaExceptie err)
+		{
+			for (unsigned i = 0; i < err.getErrors().size(); i++)
+				cout << err.getErrors()[i] << endl;
+		}
+	}
+	if (optiune == 2)
+	{
+		try {
+			cout << "Pozitie in mapa: " << endl;
+			cin >> poz;
+			cout << "Nume client nou: " << endl;
+			cin.ignore();
+			getline(cin, numeNou);
+			cout << "Adresa livrare noua: " << endl;
+			getline(cin, adresaNoua);
+			cout << "Lista cumparaturi noua: " << endl;
+			getline(cin, listaNoua);
+			cout << "Pret total nou: " << endl;
+			cin >> pretNou;
+			cout << "Nume magazin nou: " << endl;
+			cin.ignore();
+			getline(cin, magazinNou);
+			Shopping s2(numeNou, adresaNoua, listaNoua, pretNou, magazinNou);
+			Comanda* comanda = ser.getItemFromPos(poz);
+			Comanda* comanda2 = new Shopping(s2);
+			ser.updateComanda(comanda, comanda2);
+			cout << "Shopping adaugat!" << endl;
+		}
+		catch (ComandaExceptie err)
+		{
+			for (unsigned i = 0; i < err.getErrors().size(); i++)
+				cout << err.getErrors()[i] << endl;
+		}
+	}
+
+}
 void UI::cautareDupaNume()
 {
 	string nume;
 	cout << "Numele clientului: " << endl;
 	cin >> nume;
-	map<int, Mancare> manc = ser.mancareDupaNumeClient(nume);
-	map<int, Shopping> shop = ser.shoppingDupaNumeClient(nume);
-	map<int, Mancare>::iterator itr1 = manc.begin();
-	map<int, Shopping>::iterator itr2 = shop.begin();
-	cout << "Comenzi mancare:" << endl;
+	map<int, Comanda*> manc = ser.comandaDupaNumeClient(nume);
+	map<int, Comanda*>::iterator itr1 = manc.begin();
 	while (itr1 != manc.end())
 	{
-		cout << "Cheia: " << itr1->first << ' ' << itr1->second;
+		cout << "Cheia: " << itr1->first << ' ' << itr1->second->toString() << endl;
 		itr1++;
-	}
-	cout << "Comenzi shopping:" << endl;
-	while (itr2 != shop.end())
-	{
-		cout << "Cheia: " << itr2->first << ' ' << itr2->second;
-		itr2++;
 	}
 }
 
@@ -112,34 +181,40 @@ void UI::showMenu()
 	{
 		while (logat == 0)
 			logat = login();
-		cout << "1.Adaugare mancare 2. Adaugare shopping 3. Afisare comenzi 4. Cautare dupa nume 5.Logout 6.Exit"<<endl;
+		cout << "1.Adaugare comanda 2. Afisare comenzi 3. Cautare dupa nume 4.Update comanda 5.Stergere comanda 6.Logout 7.Exit"<<endl;
 		cin >> optiune;
 		if (optiune == 1)
 		{
-			adaugareMancare();
+			adaugareComanda();
 			continue;
 		}
+
 		if (optiune == 2)
-		{
-			adaugareShopping();
-			continue;
-		}
-		if (optiune == 3)
 		{
 			afisareComenzi();
 			continue;
 		}
-		if (optiune == 4)
+		if (optiune == 3)
 		{
 			cautareDupaNume();
 			continue;
 		}
+		if (optiune == 4)
+		{
+			updateComanda();
+			continue;
+		}
 		if (optiune == 5)
+		{
+			stergereComanda();
+			continue;
+		}
+		if (optiune == 6)
 		{
 			logat = 0;
 			continue;
 		}
-		if (optiune == 6)
+		if (optiune == 7)
 		{
 			ok = 0;
 			cout << "Cya later" << endl;

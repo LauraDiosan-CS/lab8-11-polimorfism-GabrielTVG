@@ -144,10 +144,13 @@
     <ClInclude Include="RepositoryFile.h" />
     <ClInclude Include="RepositoryFileCSV.h" />
     <ClInclude Include="RepositoryFileCustom.h" />
+    <ClInclude Include="Serializer.h" />
+    <ClInclude Include="SerializerComanda.h" />
     <ClInclude Include="Service.h" />
     <ClInclude Include="Test.h" />
     <ClInclude Include="UI.h" />
     <ClInclude Include="Utils.h" />
+    <ClInclude Include="ValidareComanda.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App.cpp" />
@@ -158,6 +161,7 @@
     <ClCompile Include="Test.cpp" />
     <ClCompile Include="UI.cpp" />
     <ClCompile Include="Utils.cpp" />
+    <ClCompile Include="ValidareComanda.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Comenzi.csv" />

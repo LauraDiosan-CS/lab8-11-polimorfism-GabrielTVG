@@ -18,4 +18,5 @@ public:
 	bool operator==(const Shopping&);
 	friend ostream& operator<<(ostream&, Shopping&);
 	string toStringDelimiter(char);
+	string toString();
 };

@@ -16,7 +16,7 @@ public:
 	Comanda(const string, string, string, int);
 	Comanda(string, char);
 	Comanda(const Comanda&);
-	~Comanda();
+	virtual ~Comanda();
 	string getName();
 	void setName(string);
 	string getAdresa();
@@ -25,7 +25,9 @@ public:
 	void setLista(string);
 	int getPret();
 	void setPret(int);
-	Comanda& operator=(const Comanda&);
-	bool operator==(const Comanda&);
-	virtual string toStringDelimiter(char) = 0;
+	virtual Comanda& operator=(const Comanda&);
+	virtual bool operator==(const Comanda&);
+	virtual string toStringDelimiter(char);
+	friend ostream& operator<<(ostream& os, Comanda);
+	virtual string toString();
 };

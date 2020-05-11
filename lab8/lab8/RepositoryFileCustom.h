@@ -1,70 +1,90 @@
 #pragma once
 #include "RepositoryFile.h"
+#include "Repository.h"
+#include "Serializer.h"
 #include "Utils.h"
-#include "string"
-#include <algorithm>
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <map>
+using namespace std;
+
 template <class T>
 class RepositoryFileCustom :public RepositoryFile<T>
 {
+private:
+	const char* fileName;
+	Serializer<T>* serializer;
 public:
 	RepositoryFileCustom();
-	RepositoryFileCustom(const char*);
-	void loadFromFile();
+	RepositoryFileCustom(const char*, Serializer<T>*);
+	void loadFromFile(const char*);
 	void saveToFile();
+	void addElem(T);
+	void delElem(int);
+	void updateElem(T, T);
 	~RepositoryFileCustom();
 };
 
 template <class T>
-inline RepositoryFileCustom<T>::RepositoryFileCustom()
+RepositoryFileCustom<T>::RepositoryFileCustom() :RepositoryFile<T>()
 {
-
+	fileName = "";
 }
 
 template <class T>
-inline RepositoryFileCustom<T>::RepositoryFileCustom(const char* fName) :RepositoryFile<T>(fName)
+RepositoryFileCustom<T>::RepositoryFileCustom(const char* fName, Serializer<T>* serial):RepositoryFile<T>()
 {
-
+	this->fileName = fName;
+	serializer = serial;
+	loadFromFile(fileName);
 }
 
 
 template <class T>
-inline void RepositoryFileCustom<T>::loadFromFile()
+void RepositoryFileCustom<T>::loadFromFile(const char* fileNam)
 {
 	string line;
-	ifstream f(RepositoryFile<T>::fileName);
+	this->fileName = fileNam;
+	ifstream f(this->fileName);
 	while (getline(f, line))
-	{
-	/*	int n = count(line.begin(), line.end(), '/');
-		if (n == 4)
-		{
-			Shopping ob(line, '/');
-			Repository<T>::addElem(ob);
-		}
-		else
-			if (n == 3)
-			{
-				Mancare ob(line, '/');
-				Repository<T>::addElem(ob);
-			}*/
-		T ob(line, '/');
-		Repository<T>::addElem(ob);
-		//this->elem.insert(pair<int, T>(this->contor++, a));
-	}
+		Repository<T>::addElem(serializer->fromString(line, '/'));
+	cout << "INCARCAT DIN CUSTOM" << endl;
 }
 
 template <class T>
-inline void RepositoryFileCustom<T>::saveToFile()
+void RepositoryFileCustom<T>::saveToFile()
 {
-	ofstream f(RepositoryFile<T>::fileName);
-	map<int, T> t = Repository<T>::elem;
-	for (auto itr = t.begin();itr!=t.end();itr++)
-	{
-		f << itr->second.toStringDelimiter('/') << endl;
-	}
+	ofstream fout(this->fileName);
+	map<int, T> elem = this->getAll();
+	for (auto itr = elem.begin(); itr != elem.end(); itr++)
+		fout << itr->second->toStringDelimiter('/') << endl;
+	cout << "REPOCUSTOM SAVETOFILE" << endl;
+	/*for (T t : this->getAll())
+		f << t.toStringDelimiter('/') << endl;*/
+}
+
+template<class T> void RepositoryFileCustom<T>::addElem(T obj)
+{
+	Repository<T>::addElem(obj);
+	cout << "REPOCUSTOM ADAUGARE" << endl;
+	saveToFile();
+}
+
+template<class T> void RepositoryFileCustom<T>::delElem(int nr)
+{
+	Repository<T>::delElem(nr);
+	saveToFile();
+}
+
+template<class T> void RepositoryFileCustom<T>::updateElem(T old, T newobj)
+{
+	Repository<T>::updateElem(old, newobj);
+	saveToFile();
 }
 
 template <class T>
-inline RepositoryFileCustom<T>::~RepositoryFileCustom()
+RepositoryFileCustom<T>::~RepositoryFileCustom()
 {
 
 }

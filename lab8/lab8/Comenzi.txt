@@ -1,2 +1,2 @@
-test2/asdad/asdasd/12/nu
-test2/asdad/asdasd/12/da
+testMancare/asdad/asdasd/12
+testShopping/petru/idk/20

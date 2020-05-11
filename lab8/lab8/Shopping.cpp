@@ -7,21 +7,21 @@ Shopping::Shopping()
 
 Shopping::Shopping(const string nume, string adresa, string lista, int pret, string numeMag) :Comanda(nume, adresa, lista, pret)
 {
-	numeMagazin = numeMag;
+	this->numeMagazin = numeMag;
 }
 
 Shopping::Shopping(string linie, char delim)
 {
 	vector<string> token = splitLine(linie, delim);
-	nume = token[0];
-	adresa = token[1];
-	lista = token[2];
-	pret = stoi(token[3]);
-	numeMagazin = token[4];
+	this->nume = token[0];
+	this->adresa = token[1];
+	this->lista = token[2];
+	this->pret = stoi(token[3]);
+	this->numeMagazin = token[4];
 }
 Shopping::Shopping(const Shopping& s) : Comanda(s)
 {
-	numeMagazin = s.numeMagazin;
+	this->numeMagazin = s.numeMagazin;
 }
 
 Shopping::~Shopping()
@@ -31,12 +31,12 @@ Shopping::~Shopping()
 
 string Shopping::getNumeMagazin()
 {
-	return numeMagazin;
+	return this->numeMagazin;
 }
 
 void Shopping::setNumeMagazin(string nume)
 {
-	numeMagazin = nume;
+	this->numeMagazin = nume;
 }
 
 Shopping& Shopping::operator=(const Shopping& s)
@@ -53,7 +53,7 @@ bool Shopping::operator==(const Shopping& s)
 
 ostream& operator<<(ostream& os, Shopping& s)
 {
-	os << "Nume: " << s.nume << " Adresa: " << s.adresa << " Lista cumparaturi: " << s.lista << " Pret: " << s.pret <<" Nume magazin: "<<s.numeMagazin<< endl;
+	os << "Nume: " << s.getName() << " Adresa: " << s.getAdresa() << " Lista cumparaturi: " << s.getLista() << " Pret: " << s.getPret() <<" Nume magazin: "<<s.getNumeMagazin()<< endl;
 	return os;
 }
 
@@ -61,4 +61,15 @@ ostream& operator<<(ostream& os, Shopping& s)
 string Shopping::toStringDelimiter(char delim)
 {
 	return nume + delim + adresa + delim + lista + delim + to_string(pret) + " " + numeMagazin;
+}
+
+string Shopping::toString()
+{
+	string string1, string2, string3, string4, string5;
+	string1 = this->nume;
+	string2 = this->adresa;
+	string3 = this->lista;
+	string4 = this->pret;
+	string5 = this->numeMagazin;
+	return string1 + " " + string2 + " " + string3 + " " + to_string(this->pret)+" "+string5;
 }

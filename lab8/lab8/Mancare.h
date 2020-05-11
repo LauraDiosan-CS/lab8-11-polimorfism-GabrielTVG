@@ -11,4 +11,7 @@ public:
 	~Mancare();
 	string toStringDelimiter(char);
 	friend ostream& operator<<(ostream&, Mancare&);
+	Mancare& operator=(const Mancare&);
+	bool operator==(const Mancare&);
+	string toString();
 };

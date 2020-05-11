@@ -1,15 +1,5 @@
 #include "Service.h"
 
-Service::Service()
-{
-
-}
-
-Service::Service(Repository<Mancare>* manc, Repository<Shopping>* shop)
-{
-	this->repoMancare = manc;
-	this->repoShopping = shop;
-}
 
 int Service::login(string nume, string parola)
 {
@@ -19,63 +9,44 @@ int Service::login(string nume, string parola)
 		return 0;
 }
 
-map<int, Mancare> Service::getAllMancare()
+map<int, Comanda*> Service::getAll()
 {
-	return repoMancare->getAll();
+	return repoComanda.getAll();
 }
 
-map<int, Shopping> Service::getAllShopping()
+void Service::addComanda(Comanda* com)
 {
-	return repoShopping->getAll();
+	validator.validareComanda(com);
+	repoComanda.addElem(com);
 }
 
-void Service::addMancare(Mancare& manc)
+void Service::delComanda(int poz)
 {
-	repoMancare->addElem(manc);
-	((RepositoryFile<Mancare>*)repoMancare)->saveToFile();
+	repoComanda.delElem(poz);
 }
 
-void Service::addShopping(Shopping& shop)
+void Service::updateComanda(Comanda*& vechi, Comanda* nou)
 {
-	repoShopping->addElem(shop);
-	((RepositoryFile<Shopping>*)repoShopping)->saveToFile();
+	validator.validareComanda(nou);
+	repoComanda.updateElem(vechi, nou);
 }
 
-map<int, Mancare> Service::mancareDupaNumeClient(string nume)
+Comanda* Service::getItemFromPos(int pos)
 {
-	int cont = 0;
-	map<int, Mancare> rez;
-	map<int, Mancare> manc = repoMancare->getAll();
-	map<int, Mancare>::iterator itr=manc.begin();
-	while (itr != manc.end())
-	{
-		if (itr->second.getName() == nume)
-		{
-			Mancare a = itr->second;
-			rez.insert(pair<int, Mancare>(cont++, a));
-		}
-		itr++;
-	}
+	return repoComanda.getItemFromPos(pos);
+}
+
+map<int, Comanda*> Service::comandaDupaNumeClient(string nume)
+{
+	map<int, Comanda*> t = repoComanda.getAll();
+	map<int, Comanda*> rez;
+	map<int, Comanda*>::iterator itr=t.begin();
+	for (auto itr = t.begin(); itr != t.end(); itr++)
+		if (itr->second->getName() == nume)
+			rez.insert(pair<int, Comanda*>(itr->first, itr->second));
 	return rez;
 }
 
-map<int, Shopping> Service::shoppingDupaNumeClient(string nume)
-{
-	int cont = 0;
-	map<int, Shopping> rez;
-	map<int, Shopping> shop = repoShopping->getAll();
-	map<int, Shopping>::iterator itr = shop.begin();
-	while (itr != shop.end())
-	{
-		if (itr->second.getName() == nume)
-		{
-			Shopping a = itr -> second;
-			rez.insert(pair<int, Shopping>(cont++, a));
-		}
-		itr++;
-	}
-	return rez;
-}
 
 Service::~Service()
 {

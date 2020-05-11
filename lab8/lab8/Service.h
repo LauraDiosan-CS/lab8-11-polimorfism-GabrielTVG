@@ -6,23 +6,22 @@
 #include "Comanda.h"
 #include "Mancare.h"
 #include "Shopping.h"
+#include "ValidareComanda.h"
 
 
 class Service
 {
 private:
-	Repository<Mancare>* repoMancare;
-	Repository<Shopping>* repoShopping;
-
+	RepositoryFile<Comanda*> repoComanda;
+	ComandaValidare validator;
 public:
-	Service();
-	Service(Repository<Mancare>*,Repository<Shopping>*);
+	Service(RepositoryFile<Comanda*>r) :repoComanda(r) { repoComanda = r; };
 	int login(string, string);
-	map<int, Mancare> getAllMancare();
-	map<int, Shopping> getAllShopping();
-	void addMancare(Mancare&);
-	void addShopping(Shopping&);
-	map<int, Mancare> mancareDupaNumeClient(string);
-	map<int, Shopping> shoppingDupaNumeClient(string);
+	map<int, Comanda*> getAll();
+	void addComanda(Comanda*);
+	void delComanda(int);
+	void updateComanda(Comanda*&, Comanda*);
+	map<int, Comanda*> comandaDupaNumeClient(string);
+	Comanda* getItemFromPos(int);
 	~Service();
 };

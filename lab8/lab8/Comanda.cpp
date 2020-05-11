@@ -8,81 +8,81 @@ Comanda::Comanda()
 
 Comanda::Comanda(const string num, string adres, string list, int pre)
 {
-	nume = num;
-	adresa = adres;
-	lista = list;
-	pret = pre;
+	this->nume = num;
+	this->adresa = adres;
+	this->lista = list;
+	this->pret = pre;
 }
 
 Comanda::Comanda(string linie, char delim)
 {
 	vector<string> token = splitLine(linie, delim);
-	nume = token[0];
-	adresa = token[1];
-	lista = token[2];
-	pret = stoi(token[3]);
+	this->nume = token[0];
+	this->adresa = token[1];
+	this->lista = token[2];
+	this->pret = stoi(token[3]);
 }
 Comanda::Comanda(const Comanda& c)
 {
-	nume = c.nume;
-	adresa = c.adresa;
-	lista = c.lista;
-	pret = c.pret;
+	this->nume = c.nume;
+	this->adresa = c.adresa;
+	this->lista = c.lista;
+	this->pret = c.pret;
 }
 
 Comanda::~Comanda()
 {
-	pret = 0;
+	
 }
 
 string Comanda::getName()
 {
-	return nume;
+	return this->nume;
 }
 
 void Comanda::setName(string name)
 {
-	nume = name;
+	this->nume = name;
 }
 
 string Comanda::getAdresa()
 {
-	return adresa;
+	return this->adresa;
 }
 
 void Comanda::setAdresa(string adress)
 {
-	adresa = adress;
+	this->adresa = adress;
 }
 
 string Comanda::getLista()
 {
-	return lista;
+	return this->lista;
 }
 
 void Comanda::setLista(string list)
 {
-	lista = list;
+	this->lista = list;
 }
 
 int Comanda::getPret()
 {
-	return pret;
+	return this->pret;
 }
 
 void Comanda::setPret(int pre)
 {
-	pret = pre;
+	this->pret = pre;
 }
 
 Comanda& Comanda::operator=(const Comanda& c)
 {
 	if (this != &c)
 	{
-		nume = c.nume;
-		adresa = c.adresa;
-		lista = c.lista;
-		pret = c.pret;
+		this->nume = c.nume;
+		this->adresa = c.adresa;
+		this->lista = c.lista;
+		this->pret = c.pret;
 	}
 	return *this;
 }
@@ -90,4 +90,24 @@ Comanda& Comanda::operator=(const Comanda& c)
 bool Comanda::operator==(const Comanda& c)
 {
 	return (nume == c.nume && adresa == c.adresa && lista == c.lista && pret == c.pret);
+}
+
+ostream& operator<<(ostream& os, Comanda c)
+{
+	os << "Nume: " << c.getName() << " Adresa: " << c.getAdresa() << " Lista preparate: " << c.getLista() << " Pret: " << c.getPret() << endl;
+	return os;
+}
+
+string Comanda::toStringDelimiter(char delim)
+{
+	return nume + delim + adresa + delim + lista + delim + to_string(this->pret);
+}
+
+string Comanda::toString()
+{
+	string string1, string2, string3, string4;
+	string1 = this->nume;
+	string2 = this->adresa;
+	string3 = this->lista;
+	return string1 + " " + string2 + " " + string3 + " " + to_string(this->pret);
 }
